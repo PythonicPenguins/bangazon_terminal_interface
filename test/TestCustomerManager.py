@@ -30,6 +30,7 @@ class TestCustomerManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
 
@@ -39,7 +40,9 @@ class TestCustomerManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
+
 
         create_payment_option("Visa", "123456789", active_customer)
         payment_id = get_payment_option("Visa", "123456789")
@@ -61,6 +64,7 @@ class TestCustomerManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
         create_payment_option("Visa", "123456789", active_customer)
