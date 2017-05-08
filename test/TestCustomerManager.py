@@ -29,9 +29,17 @@ class TestCustomerManager(unittest.TestCase):
 
 
     def test_choose_active_customer(self):
-        activate_customer("3")
 
-        self.assertIsNotNull(active_customer)
+        save_customer_to_database(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
+
+        all_customers = get_all_customers()
+
+        self.assertTrue(len(all_customers) > 0)
+
+        activate_customer("1")
+
+        self.assertIsNotNone(active_customer)
 
 
-    def
+
+
