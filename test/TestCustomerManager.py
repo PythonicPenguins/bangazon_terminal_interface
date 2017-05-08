@@ -12,7 +12,7 @@ class TestCustomerManager(unittest.TestCase):
 
     def test_customer_is_saved_to_database(self):
 
-        save_customer_to_database(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
+        create_customer(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
 
         customer_id = get_customer_id(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
 
@@ -21,7 +21,7 @@ class TestCustomerManager(unittest.TestCase):
 
     def test_get_all_customers(self):
 
-        save_customer_to_database(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
+        create_customer(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
 
         all_customers = get_all_customers()
 
@@ -30,7 +30,7 @@ class TestCustomerManager(unittest.TestCase):
 
     def test_choose_active_customer(self):
 
-        save_customer_to_database(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
+        create_customer(self.customer.first_name, self.customer.last_name, self.customer.address, self.customer.phone_number)
 
         all_customers = get_all_customers()
 
@@ -41,5 +41,12 @@ class TestCustomerManager(unittest.TestCase):
         self.assertIsNotNone(active_customer)
 
 
+    def test_add_payment_option(self):
+
+        create_payment_option("Visa", "123456789")
+
+        payment_id = get_payment_option("Visa", "123456789")
+
+        self.assertNotNone(payment_id)
 
 
