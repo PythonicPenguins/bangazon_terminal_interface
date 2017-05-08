@@ -1,7 +1,7 @@
 import unittest
 import sys;sys.path.append('../src')
 from CustomerManager import *
-from TestProductManager import *
+
 
 class TestCustomerManager(unittest.TestCase):
 
