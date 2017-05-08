@@ -2,8 +2,8 @@ import unittest
 import sys
 
 sys.path.append('../src')
-from src.ProductManager import *
-from src.CustomerManager import *
+from ProductManager import *
+from CustomerManager import *
 
 
 class TestProductManager(unittest.TestCase):
