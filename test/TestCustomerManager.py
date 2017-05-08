@@ -11,7 +11,6 @@ class TestCustomerManager(unittest.TestCase):
 
 
     def test_customer_is_saved_to_database(self):
-
         create_customer(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
 
         customer_id = get_customer_id(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
@@ -20,14 +19,12 @@ class TestCustomerManager(unittest.TestCase):
 
 
     def test_get_all_customers(self):
-
         create_customer(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
         all_customers = get_all_customers()
         self.assertTrue(len(all_customers) > 0)
 
 
     def test_choose_active_customer(self):
-
         create_customer(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
         all_customers = get_all_customers()
         self.assertTrue(len(all_customers) > 0)
@@ -50,7 +47,6 @@ class TestCustomerManager(unittest.TestCase):
 
 
     def test_get_all_payment_options_for_customer(self):
-
         create_customer(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
         customer_id = get_customer_id(self.customer["first_name"], self.customer["last_name"], self.customer["address"], self.customer["phone_number"])
 
