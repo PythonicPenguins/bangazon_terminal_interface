@@ -1,10 +1,14 @@
 import unittest
 import sys;sys.path.append('../src')
 from CustomerManager import *
+from ProductManager import *
 from TestCustomerManager import *
 
 class TestProductManager(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(self):
+        self.customer = {"first_name": "Meg", "last_name": "Ducharme", "address": "500 Interstate Blvd S", "phone_number": "4104561238"}
 
     def test_get_all_products(self):
         create_product("dog toy")
@@ -19,6 +23,7 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
         product_id = 1
@@ -37,8 +42,9 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
         #function will get active order, and add payment type to it
-        close_order(active_order_id, selected_payment_option)
+        close_order(1, 1)
 
