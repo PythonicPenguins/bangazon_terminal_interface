@@ -4,9 +4,15 @@ import sys
 sys.path.append('../src')
 from ProductManager import *
 from CustomerManager import *
+from TestCustomerManager import *
 
 
 class TestProductManager(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.customer = {"first_name": "Meg", "last_name": "Ducharme", "address": "500 Interstate Blvd S",
+                         "phone_number": "4104561238"}
+
     def test_get_all_products(self):
         create_product("dog toy")
 
@@ -20,15 +26,17 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
         product_id = 1
 
         # check if there is an open order
-        add_product_to_order(active_customer, product_id)
-
+        order_product_id = add_product_to_order(active_customer, product_id)
+        self.assertIsNotNone(order_product_id)
         # where payment_option = None
         active_order_id = get_active_order_id(active_customer)
+        self.assertIsNotNone(active_order_id)
 
     def test_user_can_complete_an_order(self):
         create_customer(self.customer["first_name"], self.customer["last_name"], self.customer["address"],
@@ -37,8 +45,9 @@ class TestProductManager(unittest.TestCase):
         self.assertTrue(len(all_customers) > 0)
 
         activate_customer(1)
+        active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
         # function will get active order, and add payment type to it
-        is_closed = close_order(active_order_id, selected_payment_option)
+        is_closed = close_order(1, 1)
         self.assertIsNotNone(is_closed[0][1])
