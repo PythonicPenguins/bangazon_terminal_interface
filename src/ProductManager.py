@@ -14,4 +14,4 @@ def get_active_order_id(active_customer):
 
 
 def close_order(active_order_id, select_payment_option):
-    return [(1, 1)]
+    return 1

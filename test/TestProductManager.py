@@ -48,6 +48,15 @@ class TestProductManager(unittest.TestCase):
         active_customer = get_active_customer()
         self.assertIsNotNone(active_customer)
 
+        product_id = 1
+
+        # check if there is an open order
+        order_product_id = add_product_to_order(active_customer, product_id)
+        self.assertIsNotNone(order_product_id)
+        # where payment_option = None
+        active_order_id = get_active_order_id(active_customer)
+        self.assertIsNotNone(active_order_id)
+
         # function will get active order, and add payment type to it
         is_closed = close_order(1, 1)
-        self.assertIsNotNone(is_closed[0][1])
+        self.assertIsNotNone(is_closed)
