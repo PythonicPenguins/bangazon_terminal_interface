@@ -6,7 +6,7 @@ from ProductManager import *
 
 class Bangazon():
 
-    def build_menu(self):
+    def build_menu(slef):
         print("*********************************************************")
         print("**  Welcome to Bangazon! Command Line Ordering System  **")
         print("*********************************************************")
@@ -33,6 +33,11 @@ class Bangazon():
 
         if choice == "2":
             get_all_customers()
+
+        if choice == "3":
+            payment_type = input("What is the payment type?: ")
+            account_number = input("Account Number: ")
+            create_payment_option(payment_type, account_number)
 
 if __name__ == "__main__":
     user = Bangazon()

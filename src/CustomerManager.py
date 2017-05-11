@@ -1,7 +1,9 @@
 import sys
 import sqlite3
+from bangazon import Bangazon
 
-active_customer = None
+active_customer = 1
+menu = Bangazon()
 
 def get_active_customer():
     return active_customer
@@ -11,8 +13,9 @@ def create_customer(first_name, last_name, address, phone_number):
         c = conn.cursor()
 
         try:
-            c.execute("insert into customer values (?, ?, ?, ?, ?)", (None, first_name, last_name, address, phone_number))
+            c.execute("insert into Customer values (?, ?, ?, ?, ?)", (None, first_name, last_name, address, phone_number))
             conn.commit()
+            menu.main_menu()
         except sqlite3.OperationalError as error:
             print(error)
 
@@ -37,7 +40,6 @@ def get_all_customers():
         try:
             c.execute("select first_name, last_name from customer")
             all_customers = c.fetchall()
-            print(all_customers)
             for index, row in enumerate(all_customers):
                 print("{} {} {}".format(index+1, row[0], row[1]))
             return all_customers
@@ -50,16 +52,44 @@ def activate_customer(customer_id):
     active_customer = customer_id
 
 
-def create_payment_option(name, account_number, active_customer):
-    pass
+def create_payment_option(name, account_number):
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
+
+        try:
+            c.execute("insert into PaymentOption values (?, ?, ?, ?)", (None, name, account_number, active_customer))
+            conn.commit()
+            menu.main_menu()
+        except sqlite3.OperationalError as error:
+            print(error)
 
 
 def get_payment_option(name, account_number):
-    return 1
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
+
+        try:
+            c.execute("select name, account_number from paymentoption")
+            all_payment_options = c.fetchall()
+            for index, row in enumerate(all_payment_options):
+                print("{} {} {}".format(index+1, row[0], row[1]))
+            return all_payment_options
+        except sqlite3.OperationalError as error:
+            print(error)
 
 
-def get_customer_payment_options(customer_id):
-    return [("Visa", "123456789")]
+def get_customer_payment_options():
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
+
+        try:
+            c.execute("select name, account_number from paymentoption where customer_id=?", (activate_customer))
+            customer_payment_options = c.fetchall()
+            for index, row in enumerate(customer_payment_options):
+                print("{} {} {}".format(index+1, row[0], row[1]))
+            return customer_payment_options
+        except sqlite3.OperationalError as error:
+            print(error)
 
 
 def set_payment_option(payment_id):
