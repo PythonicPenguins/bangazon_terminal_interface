@@ -2,6 +2,7 @@ import unittest
 import sys
 sys.path.append('../src')
 from CustomerManager import *
+from TearDown import tear_down_db_data
 
 
 class TestCustomerManager(unittest.TestCase):
@@ -9,6 +10,11 @@ class TestCustomerManager(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         self.customer = {"first_name": "Meg", "last_name": "Ducharme", "address": "500 Interstate Blvd S", "phone_number": "4104561238"}
+
+    @classmethod
+    def tearDownClass(self):
+        tear_down_db_data("Meg", "Ducharme", "500 Interstate Blvd S", "4104561238")
+        print("in teardown()")
 
 
     def test_customer_is_saved_to_database(self):

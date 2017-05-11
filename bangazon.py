@@ -24,7 +24,15 @@ class Bangazon():
         choice = input("> ")
 
         if choice == "1":
-            first_name = input("First Name ")
+            first_name = input("First Name: ")
+            last_name = input("Last Name: ")
+            address = input("Full Address: ")
+            phone_number = input("Phone Number: ")
+
+            create_customer(first_name, last_name, address, phone_number)
+
+        if choice == "2":
+            get_all_customers()
 
 if __name__ == "__main__":
     user = Bangazon()
