@@ -41,31 +41,38 @@ def get_all_customers():
         try:
             c.execute("select first_name, last_name from customer")
             all_customers = c.fetchall()
-            display_customers(all_customers)
+            return all_customers
 
         except sqlite3.OperationalError as error:
             print(error)
 
 
-def display_customers(all_customers):
+def display_customers():
+    all_customers = get_all_customers()
+    print(all_customers)
+
     for index, row in enumerate(all_customers):
         print("{} {} {}".format(index+1, row[0], row[1]))
 
-    chosen_active_customer = input("Choose Active Customer: ")
+    user_input = input("Choose Active Customer: ")
+
+    chosen_active_customer = all_customers[int(user_input - 1)]
+
     activate_customer(chosen_active_customer)
     print(active_customer)
 
 
-def activate_customer(customer_id):
+def activate_customer(customer_tuple):
+    print(customer_tuple)
     global active_customer
 
     with sqlite3.connect('../bangazon.db') as conn:
         c = conn.cursor()
 
         try:
-            c.execute("select customer_id, first_name, last_name from customer where customer_id=?",(customer_id))
+            c.execute("select customer_id, first_name, last_name from customer where first_name=? and last_name=?",(customer_tuple[0][0], customer_tuple[0][1]))
             active_customer = c.fetchone()
-            print(activate_customer)
+            print(active_customer)
             return active_customer
 
         except sqlite3.OperationalError as error:

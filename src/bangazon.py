@@ -41,7 +41,7 @@ class Bangazon():
             create_customer(first_name, last_name, address, phone_number)
 
         if choice == "2":
-            get_all_customers()
+            display_customers()
             self.main_menu()
 
         if choice == "3":
