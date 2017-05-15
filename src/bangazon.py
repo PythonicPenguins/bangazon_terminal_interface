@@ -9,6 +9,8 @@ class Bangazon():
     def build_menu(slef):
         active_customer = get_active_customer()
         print("")
+        print("")
+        print("")
 
         if active_customer == None:
             print("Active Customer: None")

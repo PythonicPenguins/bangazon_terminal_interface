@@ -4,7 +4,7 @@ from CustomerManager import *
 
 
 def get_all_products():
-    with sqlite3.connect('../bangazon.db') as conn:
+    with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
         try:
@@ -20,7 +20,7 @@ def get_all_products():
 
 
 def create_product(product_name):
-    with sqlite3.connect('../bangazon.db') as conn:
+    with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
         try:
@@ -33,19 +33,21 @@ def create_product(product_name):
 
 def add_product_to_order(product_id):
     active_customer = get_active_customer()
-    order_id = get_active_order_id(active_customer)
-    print(active_customer)
-    print(product_id)
+    order_id = get_active_order_id(active_customer[0])
+    print("order id add prod to order ", order_id)
+    print("active customer add prod", active_customer[0])
+    print("product id to add", product_id)
 
     if order_id == None:
-        with sqlite3.connect('../bangazon.db') as conn:
+        with sqlite3.connect('bangazon.db') as conn:
             c = conn.cursor()
 
             try:
-                c.execute("insert into `Order` values (?, ?)", (None, active_customer))
+                c.execute("insert into `Order` values (?, ?, ?)", (None, active_customer[0], None))
                 conn.commit()
 
-                order_id = get_active_order_id(active_customer)
+
+                order_id = get_active_order_id(active_customer[0])
 
                 print(order_id, product_id)
 
@@ -56,7 +58,7 @@ def add_product_to_order(product_id):
                 print(error)
 
     else:
-        with sqlite3.connect('../bangazon.db') as conn:
+        with sqlite3.connect('bangazon.db') as conn:
             c = conn.cursor()
 
             try:
@@ -68,13 +70,15 @@ def add_product_to_order(product_id):
 
 
 def get_active_order_id(active_customer):
-    with sqlite3.connect('../bangazon.db') as conn:
+    print("active customer order id", active_customer)
+    with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
         try:
-            c.execute("select order_id from `order` where customer_id=?", (active_customer))
+            print(type(active_customer))
+            c.execute("select order_id from `order` where customer_id=? and payment_option_id is ?", (active_customer, None))
             order_id = c.fetchone()
-            print(order_id)
+            print("oder id get active order", order_id)
             return order_id
         except sqlite3.OperationalError as error:
             print(error)
@@ -82,15 +86,16 @@ def get_active_order_id(active_customer):
 
 def close_order():
     active_customer = get_active_customer()
-    active_order_id = get_active_order_id(active_customer)
+    print("active customer close order", active_customer)
+    active_order_id = get_active_order_id(active_customer[0])
 
     payment_option_id = set_payment_option()
 
-    with sqlite3.connect('../bangazon.db') as conn:
+    with sqlite3.connect('bangazon.db') as conn:
             c = conn.cursor()
 
             try:
-                c.execute("update OrderProduct set payment_option_id=? where order_id=? and customer_id=?)", (payment_option_id, order_id[0], active_customer))
+                c.execute("update OrderProduct set payment_option_id=? where order_id=? and customer_id=?)", (payment_option_id, order_id[0], active_customer[0]))
                 conn.commit()
 
             except sqlite3.OperationalError as error:
