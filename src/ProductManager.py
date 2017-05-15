@@ -1,17 +1,100 @@
+import sys
+import sqlite3
+from CustomerManager import *
+
+
 def get_all_products():
-    all_products = [(1, 'rug')]
-    return all_products
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
+
+        try:
+            c.execute("select name from product")
+            all_customers = c.fetchall()
+            for index, row in enumerate(all_customers):
+                print("{} {}".format(index+1, row[0]))
+            product_to_add = input("Product to add to cart: ")
+            add_product_to_order(int(product_to_add))
+
+        except sqlite3.OperationalError as error:
+            print(error)
 
 
 def create_product(product_name):
-    pass
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
 
-def add_product_to_order(order_id, product_id):
-    return 1
+        try:
+            c.execute("insert into Product values (?, ?, ?)", (None, name, price))
+            conn.commit()
+
+        except sqlite3.OperationalError as error:
+            print(error)
+
+
+def add_product_to_order(product_id):
+    active_customer = get_active_customer()
+    order_id = get_active_order_id(active_customer)
+    print(active_customer)
+    print(product_id)
+
+    if order_id == None:
+        with sqlite3.connect('../bangazon.db') as conn:
+            c = conn.cursor()
+
+            try:
+                c.execute("insert into `Order` values (?, ?)", (None, active_customer))
+                conn.commit()
+
+                order_id = get_active_order_id(active_customer)
+
+                print(order_id, product_id)
+
+                c.execute("insert into OrderProduct values (?, ?, ?)", (None, order_id[0], product_id))
+                conn.commit()
+
+            except sqlite3.OperationalError as error:
+                print(error)
+
+    else:
+        with sqlite3.connect('../bangazon.db') as conn:
+            c = conn.cursor()
+
+            try:
+                c.execute("insert into OrderProduct values (?, ?, ?)", (None, order_id[0], product_id))
+                conn.commit()
+
+            except sqlite3.OperationalError as error:
+                print(error)
+
 
 def get_active_order_id(active_customer):
-    return 1
+    with sqlite3.connect('../bangazon.db') as conn:
+        c = conn.cursor()
+
+        try:
+            c.execute("select order_id from `order` where customer_id=?", (active_customer))
+            order_id = c.fetchone()
+            print(order_id)
+            return order_id
+        except sqlite3.OperationalError as error:
+            print(error)
 
 
-def close_order(active_order_id, select_payment_option):
-    return 1
+def close_order():
+    active_customer = get_active_customer()
+    active_order_id = get_active_order_id(active_customer)
+
+    payment_option_id = set_payment_option()
+
+    with sqlite3.connect('../bangazon.db') as conn:
+            c = conn.cursor()
+
+            try:
+                c.execute("update OrderProduct set payment_option_id=? where order_id=? and customer_id=?)", (payment_option_id, order_id[0], active_customer))
+                conn.commit()
+
+            except sqlite3.OperationalError as error:
+                print(error)
+
+
+

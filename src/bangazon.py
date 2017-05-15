@@ -7,6 +7,14 @@ from ProductManager import *
 class Bangazon():
 
     def build_menu(slef):
+        active_customer = get_active_customer()
+        print("")
+
+        if active_customer == None:
+            print("Active Customer: None")
+
+        else:
+            print("Active Customer: {} {}".format(active_customer[1], active_customer[2]))
         print("")
         print("*********************************************************")
         print("**  Welcome to Bangazon! Command Line Ordering System  **")
@@ -34,6 +42,7 @@ class Bangazon():
 
         if choice == "2":
             get_all_customers()
+            self.main_menu()
 
         if choice == "3":
             if get_active_customer() == None:
@@ -45,6 +54,25 @@ class Bangazon():
                 payment_type = input("What is the payment type?: ")
                 account_number = input("Account Number: ")
                 create_payment_option(payment_type, account_number)
+
+        if choice == "4":
+            if get_active_customer() == None:
+                print("")
+                print("YOU MUST CHOOSE AN ACTIVE CUSTOMER FIRST!")
+                print("")
+                self.main_menu()
+            else:
+                get_all_products()
+
+        if choice == "5":
+            if get_active_customer() == None:
+                print("")
+                print("YOU MUST CHOOSE AN ACTIVE CUSTOMER FIRST!")
+                print("")
+                self.main_menu()
+            else:
+                close_order()
+
 
         if choice != "7":
             self.main_menu()
