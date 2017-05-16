@@ -102,24 +102,31 @@ def get_payment_option(name, account_number):
 
 
 def get_customer_payment_options():
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor()
+    try:
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
 
-        try:
-            c.execute("select name, account_number from paymentoption where customer_id={}".format(active_customer[0]))
-            customer_payment_options = c.fetchall()
-            return customer_payment_options
-        except sqlite3.OperationalError as error:
-            print(error)
+            try:
+                c.execute("select name, account_number from paymentoption where customer_id={}".format(active_customer[0]))
+                customer_payment_options = c.fetchall()
+                return customer_payment_options
+            except sqlite3.OperationalError as error:
+                print(error)
+    except:
+        return None
 
 
 def set_payment_option():
     payment_options = get_customer_payment_options()
 
-    for index, row in enumerate(payment_options):
-        print("{}. {} {}".format(index+1, row[0], row[1]))
+    if payment_options == None:
+        print("You must save a payment option before you complete the order!")
 
-    payment_option_id = input("Choose payment option: ")
-    return payment_option_id
+    else:
+        for index, row in enumerate(payment_options):
+            print("{}. {} {}".format(index+1, row[0], row[1]))
+
+        payment_option_id = input("Choose payment option: ")
+        return payment_option_id
 
 

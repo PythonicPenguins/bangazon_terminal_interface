@@ -98,19 +98,24 @@ def close_order():
 
         user_input = input("(Y/N) > ")
 
-        if user_input == "Y":
+        if upper(user_input) == "Y":
 
             payment_option_id = set_payment_option()
 
-            with sqlite3.connect('bangazon.db') as conn:
-                c = conn.cursor()
+            if payment_option_id == None:
+                return
 
-                try:
-                    c.execute("update `Order` set payment_option_id={} where order_id={} and customer_id={}".format(payment_option_id, order_id[0], active_customer[0]))
-                    conn.commit()
+            else:
 
-                except sqlite3.OperationalError as error:
-                    print(error)
+                with sqlite3.connect('bangazon.db') as conn:
+                    c = conn.cursor()
+
+                    try:
+                        c.execute("update `Order` set payment_option_id={} where order_id={} and customer_id={}".format(payment_option_id, order_id[0], active_customer[0]))
+                        conn.commit()
+
+                    except sqlite3.OperationalError as error:
+                        print(error)
 
         else:
             return
