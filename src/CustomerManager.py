@@ -121,11 +121,9 @@ def set_payment_option():
     payment_options = get_customer_payment_options()
 
     for index, row in enumerate(payment_options):
-        print("{} {} {}".format(index+1, row[0], row[1]))
+        print("{}. {} {}".format(index+1, row[0], row[1]))
 
     payment_option_id = input("Choose payment option: ")
-
     return payment_option_id
-
 
 

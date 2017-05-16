@@ -6,7 +6,7 @@ from ProductManager import *
 
 class Bangazon():
 
-    def build_menu(slef):
+    def build_menu(self):
         active_customer = get_active_customer()
         print("")
         print("")
