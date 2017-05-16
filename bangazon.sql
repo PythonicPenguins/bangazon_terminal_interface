@@ -10,7 +10,9 @@ CREATE TABLE Customer (
 CREATE TABLE `Order` (
     order_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     customer_id INTEGER NOT NULL,
+    payment_option_id INTEGER,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
+    FOREIGN KEY (payment_option_id) REFERENCES PaymentOption(payment_option_id)
 );
 
 
@@ -33,8 +35,8 @@ CREATE TABLE OrderProduct (
     order_product_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES Customer(order_id),
-    FOREIGN KEY (product_id) REFERENCES Customer(product_id)
+    FOREIGN KEY (order_id) REFERENCES `Order`(order_id),
+    FOREIGN KEY (product_id) REFERENCES Product(product_id)
 );
 
 
@@ -48,9 +50,3 @@ DROP TABLE PAYMENTOPTION
 DROP TABLE CUSTOMER
 DROP TABLE PRODUCT
 DROP TABLE `ORDER`
-
-
-
-
-
-
