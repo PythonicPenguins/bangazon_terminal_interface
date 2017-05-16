@@ -47,8 +47,6 @@ def add_product_to_order(product_id):
 
                 order_id = get_active_order_id(active_customer[0])
 
-                print(order_id, product_id)
-
                 c.execute("insert into OrderProduct values (?, ?, ?)", (None, order_id[0], product_id))
                 conn.commit()
 
@@ -68,43 +66,54 @@ def add_product_to_order(product_id):
 
 
 def get_active_order_id(active_customer):
-    # print("active customer order id", active_customer)
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor()
+    try:
+        with sqlite3.connect('bangazon.db') as conn:
+            c = conn.cursor()
 
-        try:
-            c.execute("select order_id from `order` where customer_id=? and payment_option_id is ?", (active_customer, None))
-            order_id = c.fetchone()
-            print("order id get active order", order_id)
-            return order_id
-        except sqlite3.OperationalError as error:
-            print(error)
+            try:
+                c.execute("select order_id from `order` where customer_id=? and payment_option_id is ?", (active_customer, None))
+                order_id = c.fetchone()
+                print("order id get active order", order_id)
+                return order_id
+            except sqlite3.OperationalError as error:
+                print(error)
+    except:
+        return None
 
 
 def close_order():
     active_customer = get_active_customer()
     order_id = get_active_order_id(active_customer[0])
-    total_price = get_total_price()
 
-    print("a", active_customer)
-    print("b", order_id)
-    print("c", total_price[0])
+    if order_id == None:
+        print("")
+        print("")
+        print("******** You must add products to your cart first! ********")
+        return
 
-    print("Your order total is ${}. Ready to purchase?".format(total_price[0]))
+    else:
+        total_price = get_total_price()
 
-    user_input = input("(Y/N) > ")
+        print("Your order total is ${:.2f} Are you ready to purchase?".format(total_price[0]))
 
-    payment_option_id = set_payment_option()
+        user_input = input("(Y/N) > ")
 
-    with sqlite3.connect('bangazon.db') as conn:
-        c = conn.cursor()
+        if user_input == "Y":
 
-        try:
-            c.execute("update `Order` set payment_option_id={} where order_id={} and customer_id={}".format(payment_option_id, order_id[0], active_customer[0]))
-            conn.commit()
+            payment_option_id = set_payment_option()
 
-        except sqlite3.OperationalError as error:
-            print(error)
+            with sqlite3.connect('bangazon.db') as conn:
+                c = conn.cursor()
+
+                try:
+                    c.execute("update `Order` set payment_option_id={} where order_id={} and customer_id={}".format(payment_option_id, order_id[0], active_customer[0]))
+                    conn.commit()
+
+                except sqlite3.OperationalError as error:
+                    print(error)
+
+        else:
+            return
 
 def get_total_price():
     active_customer = get_active_customer()
@@ -115,10 +124,8 @@ def get_total_price():
 
         try:
             query = "select sum(product.price) from `order` o join orderproduct op on op.order_id=o.order_id join product on op.product_id=product.product_id where o.order_id = {}".format(order_id[0])
-            print(query)
             c.execute(query)
             total_cost = c.fetchone()
-            print("total cost", total_cost)
             return total_cost
 
         except sqlite3.OperationalError as error:

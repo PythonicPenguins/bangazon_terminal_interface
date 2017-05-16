@@ -27,7 +27,6 @@ def get_customer_id(first_name, last_name, address, phone_number):
         try:
             c.execute("select customer_id from customer where first_name=? and last_name=? and address=? and phone_number=?",(first_name, last_name, address, phone_number))
             customer_id = c.fetchone()
-            print("cutsomer_id", customer_id[0])
             return customer_id[0]
 
         except sqlite3.OperationalError as error:
@@ -50,15 +49,14 @@ def get_all_customers():
 def display_customers():
     all_customers = get_all_customers()
 
+    print("")
     for index, row in enumerate(all_customers):
         print("{}. {} {}".format(index+1, row[0], row[1]))
 
     user_input = input("Choose Active Customer: ")
 
     chosen_active_customer = all_customers[int(user_input) - 1]
-
     activate_customer(chosen_active_customer)
-    print("active customer", active_customer)
 
 
 def activate_customer(customer_tuple):
@@ -78,7 +76,6 @@ def activate_customer(customer_tuple):
 
 
 def create_payment_option(name, account_number):
-    print("active cutsomer create payment", active_customer)
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
@@ -105,7 +102,6 @@ def get_payment_option(name, account_number):
 
 
 def get_customer_payment_options():
-    print("active get cus payment", active_customer[0])
     with sqlite3.connect('bangazon.db') as conn:
         c = conn.cursor()
 
