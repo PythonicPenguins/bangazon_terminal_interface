@@ -97,8 +97,9 @@ def close_order():
         print("Your order total is ${:.2f} Are you ready to purchase?".format(total_price[0]))
 
         user_input = input("(Y/N) > ")
+        user_input = user_input.strip()
 
-        if upper(user_input) == "Y":
+        if user_input.upper() == "Y":
 
             payment_option_id = set_payment_option()
 
