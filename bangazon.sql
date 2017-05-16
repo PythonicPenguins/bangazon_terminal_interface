@@ -10,7 +10,9 @@ CREATE TABLE Customer (
 CREATE TABLE `Order` (
     order_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     customer_id INTEGER NOT NULL,
+    payment_option_id INTEGER,
     FOREIGN KEY (customer_id) REFERENCES Customer(customer_id)
+    FOREIGN KEY (payment_option_id) REFERENCES PaymentOption(payment_option_id)
 );
 
 
